@@ -8,6 +8,9 @@ class chrony::params {
   $chrony_password  = 'xyzzy'
   $queryhosts       = []
   $port             = 0
+  $makestep         = '0.5 3'
+  $stratumweight    = '0'
+  $local_stratum    = '10'
   $config_keys_manage = true
 
   case $::osfamily {

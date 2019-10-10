@@ -1,8 +1,4 @@
 language: ruby
-rvm:
-    - 1.9.3
-    - 2.0.0
-    - 2.1.0
 
 script: 'bundle exec rake'
 
@@ -10,8 +6,16 @@ matrix:
   fast_finish: true
   include:
   - rvm: 1.9.3
+    env: PUPPET_VERSION=3.4.3
+  - rvm: 1.9.3
     env: PUPPET_VERSION=3.8.7
   - rvm: 2.0.0
-    env: PUPPET_VERSION=3.8.7
+    env: PUPPET_VERSION=3.4.3
   - rvm: 2.0.0
-    env: PUPPET_VERSION=3.8.7 FUTURE_PARSER="yes"
+    env: PUPPET_VERSION=3.8.7
+  - rvm: 2.2.1
+    env: PUPPET_VERSION=4.10.11
+  - rvm: 2.5.3
+    env: PUPPET_VERSION=5.5.16
+  - rvm: 2.5.3
+    env: PUPPET_VERSION=5.5.16 FUTURE_PARSER="yes"

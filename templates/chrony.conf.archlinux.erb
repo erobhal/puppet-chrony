@@ -178,7 +178,7 @@ dumpdir /var/log/chrony
 
 ! allow 192.168/16
 
-<% Array(@queryhosts).each do |allowed| -%>
+<% Array(@queryhosts_result).each do |allowed| -%>
 allow <%= allowed %>
 <% end -%>
 

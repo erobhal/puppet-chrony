@@ -1,30 +1,26 @@
-require 'bundler'
-Bundler.require(:rake)
-
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
+PuppetLint.configuration.send('disable_80chars')
+PuppetLint.configuration.send('disable_140chars')
+PuppetLint.configuration.relative = true
+PuppetLint.configuration.ignore_paths = ['spec/**/*.pp', 'pkg/**/*.pp', 'vendor/**/*.pp']
+PuppetSyntax.future_parser = true if ENV['FUTURE_PARSER'] == 'yes'
 
-Rake::Task[:lint].clear # https://github.com/rodjek/puppet-lint/issues/331
-PuppetLint::RakeTask.new :lint do |config|
-  # Pattern of files to check, defaults to `**/*.pp`
-  config.log_format = '%{path}:%{linenumber}:%{KIND}: %{message}'
-  config.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp"]
-  # TODO: remove this check once the relative config
-  # is supported by puppet-lint release
-  config.disable_checks = [ 'autoloader_layout' ]
-  #config.relative = true
-end
-
-# use librarian-puppet to manage fixtures instead of .fixtures.yml
-# offers more possibilities like explicit version management, forge downloads,...
-task :librarian_spec_prep do
-  sh "librarian-puppet install --path=spec/fixtures/modules/"
-  pwd = `pwd`.strip
-  unless File.directory?("#{pwd}/spec/fixtures/modules/chrony")
-    sh "ln -s #{pwd} #{pwd}/spec/fixtures/modules/chrony"
+desc 'Validate manifests, templates, and ruby files'
+task :validate do
+  Dir['spec/**/*.rb', 'lib/**/*.rb'].each do |ruby_file|
+    sh "ruby -c #{ruby_file}" unless ruby_file =~ /spec\/fixtures/
+  end
+  Dir['files/**/*.sh'].each do |shell_script|
+    sh "bash -n #{shell_script}"
+  end
+  Dir['manifests/**/*.pp'].each do |manifest|
+    sh "puppet parser validate --noop #{manifest}"
+  end
+  Dir['templates/**/*.erb'].each do |template|
+    sh "erb -P -x -T '-' #{template} | ruby -c"
   end
 end
-task :spec_prep => :librarian_spec_prep
 
+task :default => [:validate, :lint, :spec]
 
-task :default => [:spec, :lint]

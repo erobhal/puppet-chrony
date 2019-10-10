@@ -15,6 +15,9 @@ class chrony (
   $servers              = $chrony::params::servers,
   $queryhosts           = $chrony::params::queryhosts,
   $port                 = $chrony::params::port,
+  $makestep             = $chrony::params::makestep,
+  $stratumweight        = $chrony::params::stratumweight,
+  $local_stratum        = $chrony::params::local_stratum,
   $service_enable       = $chrony::params::service_enable,
   $service_ensure       = $chrony::params::service_ensure,
   $service_manage       = $chrony::params::service_manage,
@@ -24,6 +27,17 @@ chrony::params {
   if ! $config_keys_manage and $chrony_password != 'unset'  {
     fail("Setting \$config_keys_manage false and \$chrony_password at same time in ${module_name} is not possible.")
   }
+
+  if is_string($queryhosts) and ($queryhosts =~ /(?i:any)/) {
+    $queryhosts_result = ''
+  }
+  elsif is_array($queryhosts) and ('any' in $queryhosts or 'Any' in $queryhosts or 'ANY' in $queryhosts) {
+    $queryhosts_result = ''
+  }
+  else {
+    $queryhosts_result = $queryhosts
+  }
+
 
   include '::chrony::install'
   include '::chrony::config'

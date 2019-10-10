@@ -1,6 +1,6 @@
 #puppet-chrony
 
-[![Build Status](https://secure.travis-ci.org/aboe76/puppet-chrony.png?branch=master)](http://travis-ci.org/aboe76/puppet-chrony)
+[![Build Status](https://secure.travis-ci.org/erobhal/puppet-chrony.png?branch=master)](http://travis-ci.org/erobhal/puppet-chrony)
 
 ####Table of Contents
 
@@ -102,6 +102,13 @@ class { '::chrony':
 }
 ```
 
+###Allow any hosts
+```puppet
+class { '::chrony':
+  queryhosts  => 'any',
+}
+```
+
 ##Reference
 
 ###Classes
@@ -176,6 +183,24 @@ or a hash of servers to their respective options.
 ####`queryhosts`
 
 This adds the networks, hosts that are allowed to query the daemon.
+Set to 'any' to allow all hosts.
+
+####`makestep`
+
+Configures the automatic stepping when system clock is far adrift. It has two
+parameters, stepping threshold (in seconds) and number of future clock updates
+for which will be the threshold active
+
+####`stratumweight`
+
+The stratumweight directive sets how much distance should be added per stratum
+to the synchronisation distance when chronyd selects the synchronisation source
+from available sources.
+
+####`local_stratum`
+
+Eenables the local reference mode on the host, and sets the stratum at which it
+should claim to be synchronised
 
 ####`service_enable`
 

@@ -7,7 +7,7 @@ server <%= server %> iburst
 <% end end -%>
 
 # Ignore stratum in source selection.
-stratumweight 0
+stratumweight <%= @stratumweight %>
 
 # Record the rate at which the system clock gains/losses time.
 driftfile /var/lib/chrony/drift
@@ -17,11 +17,11 @@ rtcsync
 
 # In first three updates step the system clock instead of slew
 # if the adjustment is larger than 10 seconds.
-makestep 10 3
+makestep <%= @makestep %>
 
 # Allow client access from local network.
 #allow 192.168/16
-<% Array(@queryhosts).each do |allowed| -%>
+<% Array(@queryhosts_result).each do |allowed| -%>
 allow <%= allowed %>
 <% end -%>
 
@@ -33,7 +33,7 @@ bindcmdaddress ::1
 port <%= @port %>
 
 # Serve time even if not synchronized to any NTP server.
-local stratum 10
+local stratum <%= @local_stratum %>
 
 keyfile /etc/chrony.keys
 
