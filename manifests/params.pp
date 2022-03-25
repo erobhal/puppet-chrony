@@ -47,6 +47,22 @@ class chrony::params {
       }
     }
 
+    'Debian' : {
+      $config = '/etc/chrony/chrony.conf'
+      $config_template = 'chrony/chrony.conf.redhat.erb'
+      $config_keys = '/etc/chrony/chrony.keys'
+      $config_keys_template = 'chrony/chrony.keys.redhat.erb'
+      $config_keys_owner = 0
+      $config_keys_group = root
+      $config_keys_mode  = '0640'
+      $package_name = 'chrony'
+      $service_name = 'chrony'
+      $servers = {
+        '0.pool.ntp.org' => ['iburst'],
+        '1.pool.ntp.org' => ['iburst'],
+        '2.pool.ntp.org' => ['iburst'],
+      }
+    }
     default     : {
       fail("The ${module_name} module is not supported on an ${::osfamily} based system.")
     }
