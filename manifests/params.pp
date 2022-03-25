@@ -49,9 +49,9 @@ class chrony::params {
 
     'Debian' : {
       $config = '/etc/chrony/chrony.conf'
-      $config_template = 'chrony/chrony.conf.redhat.erb'
+      $config_template = 'chrony/chrony.conf.debian.erb'
       $config_keys = '/etc/chrony/chrony.keys'
-      $config_keys_template = 'chrony/chrony.keys.redhat.erb'
+      $config_keys_template = 'chrony/chrony.keys.debian.erb'
       $config_keys_owner = 0
       $config_keys_group = root
       $config_keys_mode  = '0640'
